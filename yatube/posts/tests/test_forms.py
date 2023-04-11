@@ -7,7 +7,6 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 
-from ..forms import PostForm
 from ..models import Post, Group, User, Comment
 from ..tests.constants import (
     AUTHOR_USERNAME,
@@ -35,25 +34,11 @@ class PostFormTest(TestCase):
             slug=GROUP_SLUG,
             description=GROUP_DESCRIPTION,
         )
-        cls.small_gif = (
-            b'\x47\x49\x46\x38\x39\x61\x02\x00'
-            b'\x01\x00\x80\x00\x00\x00\x00\x00'
-            b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
-            b'\x00\x00\x00\x2C\x00\x00\x00\x00'
-            b'\x02\x00\x01\x00\x00\x02\x02\x0C'
-            b'\x0A\x00\x3B'
-        )
-        cls.uploaded = SimpleUploadedFile(
-            name='small.gif',
-            content=cls.small_gif,
-            content_type='image/gif',
-        )
         cls.post = Post.objects.create(
             author=cls.author,
             text=POST_TEXT,
+            group=cls.group
         )
-        cls.form_post = PostForm()
-        cls.form_comment = Comment()
         cls.comment = Comment.objects.create(
             text=COMMENT_TEXT,
         )
@@ -73,7 +58,6 @@ class PostFormTest(TestCase):
         form_data = {
             'text': POST_TEXT,
             'group': self.group.id,
-            'image': self.uploaded,
         }
         self.authorized_client_author.post(reverse(POST_CREATE_URL_NAME),
                                            data=form_data,
@@ -86,7 +70,6 @@ class PostFormTest(TestCase):
         form_data = {
             'text': POST_TEXT,
             'group': self.group.id,
-            'image': self.uploaded,
         }
         response = self.client.post(reverse(POST_CREATE_URL_NAME),
                                     data=form_data,
@@ -96,10 +79,23 @@ class PostFormTest(TestCase):
         self.assertRedirects(response, '/auth/login/?next=/create/')
 
     def test_post_edit_author(self):
+        small_gif = (
+             b'\x47\x49\x46\x38\x39\x61\x02\x00'
+             b'\x01\x00\x80\x00\x00\x00\x00\x00'
+             b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
+             b'\x00\x00\x00\x2C\x00\x00\x00\x00'
+             b'\x02\x00\x01\x00\x00\x02\x02\x0C'
+             b'\x0A\x00\x3B'
+        )
+        uploaded = SimpleUploadedFile(
+            name='small.gif',
+            content=small_gif,
+            content_type='image/gif',
+        )
         form_data = {
-            'text': POST_TEXT,
+            'text': 'POST_TEXT',
             'group': self.group.id,
-            'image': self.uploaded,
+            'image': uploaded,
         }
         response = self.authorized_client_author.post(
             reverse(POST_EDIT_URL_NAME, kwargs={'post_id': self.post.id}),
@@ -108,7 +104,7 @@ class PostFormTest(TestCase):
         )
         self.assertTrue(
             Post.objects.filter(
-                text=POST_TEXT,
+                text='POST_TEXT',
                 group=self.group.id,
                 image='posts/small.gif',
             ).exists()
@@ -119,7 +115,6 @@ class PostFormTest(TestCase):
         form_data = {
             'text': '',
             'group': self.group.id,
-            'image': self.uploaded,
         }
         response = self.authorized_client_author.post(
             reverse(POST_EDIT_URL_NAME, kwargs={'post_id': self.post.id}),

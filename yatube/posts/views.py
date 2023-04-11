@@ -107,7 +107,6 @@ def post_edit(request, post_id):
         files=request.FILES or None,
         instance=post
     )
-
     if form.is_valid():
         form.save()
         return redirect('posts:post_detail', post_id=post.id)
