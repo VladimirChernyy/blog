@@ -284,6 +284,7 @@ class PaginatorViewsTest(TestCase):
             group=self.group,
         )
         cache.clear()
+
     def test_paginator(self):
         url_name = {
             INDEX_URL_NAME: (
