@@ -59,7 +59,7 @@ class Comment(models.Model):
         Post,
         blank=True,
         null=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         related_name='comment',
     )
     author = models.ForeignKey(

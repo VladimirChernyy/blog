@@ -111,6 +111,20 @@ class PostFormTest(TestCase):
         )
         self.assertRedirects(response, f'/posts/{self.post.id}/')
 
+    def test_post_edit_author_check_no_valid_image(self):
+        uploaded = '123'
+        form_data = {
+            'text': 'POST_TEXT',
+            'group': self.group.id,
+            'image': uploaded,
+        }
+        response = self.authorized_client_author.post(
+            reverse(POST_EDIT_URL_NAME, kwargs={'post_id': self.post.id}),
+            data=form_data,
+            follow=True,
+        )
+        self.assertFormError(response, 'post', 'image', None)
+
     def test_post_edit_no_valid(self):
         form_data = {
             'text': '',
