@@ -66,10 +66,13 @@ class Comment(models.Model):
         User,
         blank=True,
         null=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         related_name='comment',
     )
-    text = models.TextField('Текст', help_text='Текст нового комментария')
+    text = models.TextField(
+        'Текст',
+        help_text='Текст нового комментария'
+    )
     created = models.DateTimeField(
         auto_now_add=True,
     )

@@ -123,7 +123,7 @@ class PostFormTest(TestCase):
             data=form_data,
             follow=True,
         )
-        self.assertFormError(response, 'post', 'image', None)
+        self.assertFormError(response, 'post', 'image', errors=[])
 
     def test_post_edit_no_valid(self):
         form_data = {
