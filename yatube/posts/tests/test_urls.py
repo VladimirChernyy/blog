@@ -2,8 +2,8 @@ from http import HTTPStatus
 
 from django.test import TestCase, Client
 
-from ..models import Post, Group, User
-from ..tests.constants import (
+from posts.models import Post, Group, User
+from posts.tests.constants import (
     AUTHOR_USERNAME,
     USER_USERNAME,
     GROUP_TITLE,

@@ -3,8 +3,8 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.cache import cache_page
 
-from .forms import PostForm, CommentForm
-from .models import Post, Group, User, Comment, Follow
+from posts.forms import PostForm, CommentForm
+from posts.models import Post, Group, User, Comment, Follow
 
 POST_COUNT = 10
 CACHE_TIME = 20

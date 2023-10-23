@@ -6,8 +6,8 @@ from django.core.paginator import Page
 from django.test import TestCase, Client
 from django.urls import reverse
 
-from ..models import Post, Group, User, Follow
-from ..tests import constants
+from posts.models import Post, Group, User, Follow
+from posts.tests import constants
 
 TEST_PAGINATOR_PAGE = 10
 

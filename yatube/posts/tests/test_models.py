@@ -1,7 +1,7 @@
 from django.test import TestCase
 
-from ..models import Post, Group, User, NUMBER_OF_CHARACTERS
-from ..tests.constants import (
+from posts.models import Post, Group, User, NUMBER_OF_CHARACTERS
+from posts.tests.constants import (
     AUTHOR_USERNAME,
     GROUP_TITLE,
     GROUP_SLUG,
